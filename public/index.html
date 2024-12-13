@@ -2,20 +2,49 @@
 <html>
 <head>
     <title>Bandcamp Wishlist Fetcher</title>
+    <style>
+        body { margin: 20px; font-family: Arial, sans-serif; }
+        input { width: 300px; padding: 5px; }
+        button { padding: 5px 10px; }
+        #result { margin-top: 20px; white-space: pre-wrap; }
+    </style>
 </head>
 <body>
     <h1>Bandcamp Wishlist Fetcher</h1>
-    <input type="text" id="urlInput" placeholder="Enter Bandcamp wishlist URL">
-    <button onclick="testServer()">Test Connection</button>
+    <div>
+        <input type="text" id="urlInput" placeholder="Enter Bandcamp wishlist URL (e.g., https://bandcamp.com/username)">
+        <button onclick="fetchWishlist()">Fetch Wishlist</button>
+    </div>
     <div id="result"></div>
 
     <script>
-        async function testServer() {
+        async function fetchWishlist() {
+            const urlInput = document.getElementById('urlInput');
             const resultDiv = document.getElementById('result');
+            const url = urlInput.value.trim();
+
+            if (!url) {
+                resultDiv.textContent = 'Please enter a URL';
+                return;
+            }
+
+            resultDiv.textContent = 'Loading...';
+
             try {
-                const response = await fetch('/api/test');
+                const response = await fetch('/api/fetch-wishlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch wishlist');
+                }
+
                 const data = await response.json();
-                resultDiv.textContent = data.message;
+                resultDiv.textContent = JSON.stringify(data, null, 2);
             } catch (error) {
                 resultDiv.textContent = 'Error: ' + error.message;
             }
