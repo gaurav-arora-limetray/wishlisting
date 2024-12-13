@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bandcamp Wishlist Fetcher</title>
+</head>
+<body>
+    <h1>Bandcamp Wishlist Fetcher</h1>
+    <input type="text" id="urlInput" placeholder="Enter Bandcamp wishlist URL">
+    <button onclick="testServer()">Test Connection</button>
+    <div id="result"></div>
+
+    <script>
+        async function testServer() {
+            const resultDiv = document.getElementById('result');
+            try {
+                const response = await fetch('/api/test');
+                const data = await response.json();
+                resultDiv.textContent = data.message;
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
