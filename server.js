@@ -5,6 +5,8 @@ const app = express();
 app.use(express.static('public'));
 app.use(express.json());
 
+
+
 app.post('/api/fetch-wishlist', async (req, res) => {
     try {
         const { url } = req.body;
@@ -13,7 +15,8 @@ app.post('/api/fetch-wishlist', async (req, res) => {
         const fanId = url.split('/').pop();
 
         // Step 2: Fetch the wishlist page to get initial token
-        const pageResponse = await fetch(url);
+        const pageResponse = await fetch('https://bandcamp.com/' + fanId);
+
         const html = await pageResponse.text();
         
         // Find the total count from the "view all X items" button
